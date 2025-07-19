@@ -1,0 +1,300 @@
+{
+	"info": {
+		"_postman_id": "028aa3b8-a022-4094-abd5-07c54bcca928",
+		"name": "Posts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20113688",
+		"_collection_link": "https://universal-meadow-703950.postman.co/workspace/Practicing~dc17c708-1cca-4688-94ce-410c5968ed57/collection/20113688-028aa3b8-a022-4094-abd5-07c54bcca928?action=share&source=collection_link&creator=20113688"
+	},
+	"item": [
+		{
+			"name": "Get all Posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response is an array\" , function(){\r",
+							"    pm.expect(Array.isArray(jsonData)).to.be.true;\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Each object has userId, id, title, body\" , function(){\r",
+							"    jsonData.forEach(post => {\r",
+							"        pm.expect(post).to.have.all.keys('userId', 'id', 'title', 'body');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Each object has userId, id, title, body\" , function(){\r",
+							"jsonData.forEach((post)=> {\r",
+							"        pm.expect(post).to.have.property(\"userId\");\r",
+							"        pm.expect(post).to.have.property(\"id\");\r",
+							"        pm.expect(post).to.have.property(\"title\");\r",
+							"        pm.expect(post).to.have.property(\"body\");\r",
+							"\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each object has userId, id, title, body\" , function(){\r",
+							"jsonData.forEach(function(post) {\r",
+							"        pm.expect(post).to.have.property(\"userId\");\r",
+							"        pm.expect(post).to.have.property(\"id\");\r",
+							"        pm.expect(post).to.have.property(\"title\");\r",
+							"        pm.expect(post).to.have.property(\"body\");\r",
+							"\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a Post by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Response body contains keys : userId , id , title , body\" , function(){\r",
+							"    pm.expect(jsonData[0]).to.have.all.keys('userId', 'id', 'title', 'body');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response body is an array\", function () {\r",
+							"console.log(Array.isArray(jsonData)); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID = 2 \" , function(){\r",
+							"    pm.expect(jsonData[0].id).to.equal(2);\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts?id=2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Response values are valid \" , function(){\r",
+							"    pm.expect(jsonData.title).to.eql(\"New Test Post\");\r",
+							"    pm.expect(jsonData.body).to.eql(\"Testing post creation\");\r",
+							"    pm.expect(jsonData.userId).to.eql(1);\r",
+							"    \r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response has id\", function () {\r",
+							"pm.expect(jsonData.id).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has an ID\" , function(){\r",
+							"    pm.expect(jsonData).to.haveOwnProperty('id');\r",
+							"    pm.expect(jsonData.id).to.be.a('number');\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"New Test Post\",\r\n  \"body\": \"Testing post creation\",\r\n  \"userId\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body has correct title , body and userId\", function () {\r",
+							"    pm.expect(jsonData.title).to.eql(\"Test Update Post\");\r",
+							"    pm.expect(jsonData.body).to.eql(\"Testing Updating post creation\");\r",
+							"    pm.expect(jsonData.userId).to.eql(100);\r",
+							" \r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID remains the same\" , function(){\r",
+							"    pm.expect(jsonData.id).to.eql(1);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Test Update Post\",\r\n    \"body\": \"Testing Updating post creation\",\r\n    \"userId\": 100,\r\n    \"id\": 101\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"Response body is empty\" , function(){\r",
+							"    pm.expect(jsonData).to.eql({});\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/posts/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/posts/2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"posts",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
