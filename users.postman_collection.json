@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "97fe8a1f-03f3-416c-a7ff-bfbf78f1a25a",
+		"name": "users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20113688",
+		"_collection_link": "https://universal-meadow-703950.postman.co/workspace/Practicing~dc17c708-1cca-4688-94ce-410c5968ed57/collection/20113688-97fe8a1f-03f3-416c-a7ff-bfbf78f1a25a?action=share&source=collection_link&creator=20113688"
+	},
+	"item": [
+		{
+			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData  = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body has the key data & it is an array\", function(){\r",
+							"    pm.expect(jsonData).to.haveOwnProperty(\"data\");\r",
+							"    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"for each data object , it has all the keys\" , function(){\r",
+							"    jsonData.data.forEach(function (data) {\r",
+							"        pm.expect(data).to.have.all.keys(\"id\", \"email\", \"first_name\", \"last_name\", \"avatar\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"for each data object , it has all the keys\" , function(){\r",
+							"    jsonData.data.forEach((data)=> {\r",
+							"        pm.expect(data).to.have.all.keys(\"id\", \"email\", \"first_name\", \"last_name\", \"avatar\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Email is a string\" , function(){\r",
+							"    jsonData.data.forEach((data) => {\r",
+							"\r",
+							"        pm.expect(data.email).to.be.a(\"string\");\r",
+							"\r",
+							"    }\r",
+							"\r",
+							"    )\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Array has at least one element\" , function(){\r",
+							"    pm.expect(jsonData.data.length).to.be.at.least(1);\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/users?page=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"id\", \"465\");\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n           \r\n            \"email\": \"maiok.bluth@reqres.in\",\r\n            \"first_name\": \"mai\",\r\n            \"last_name\": \"oka\"\r\n }\r\n            ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update the user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response contain a key updatedAt & it is a string\" , function(){\r",
+							"\r",
+							"    pm.expect(jsonData).to.haveOwnProperty(\"updatedAt\");\r",
+							"    pm.expect(jsonData.updatedAt).to.be.a(\"string\");\r",
+							"\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response has not the key Id \" , function(){\r",
+							"    pm.expect(jsonData).to.not.haveOwnProperty(\"id\");\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n           \r\n            \"email\": \"maiokasha@test.in\",\r\n            \"first_name\": \"May\",\r\n            \"last_name\": \"okasha\"\r\n }\r\n            ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n           \r\n            \"email\": \"maiokasha@test\"\r\n         \r\n }\r\n        ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is empty\" , function(){\r",
+							"    pm.expect(pm.response.text()).to.be.empty;\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/users/{{id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User That Does Not Exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body  is {}\", function(){\r",
+							"    pm.expect(pm.response.text()).to.eql(\"{}\")\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "reqres-free-v1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://reqres.in/api/users/99999",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"at least one email in the array ends with @reqres.in\" , function(){\r",
+							"\r",
+							"    const emails = jsonData.data.map(user => user.email);\r",
+							"    const hasReqresEmail = emails.some(email => email.endsWith(\"@reqres.in\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Assert that at least one avatar URL starts with https\", function(){\r",
+							"    const avatars = jsonData.data.map(user => user.avatar);\r",
+							"    const hasHttpsAvatar = avatars.some(avatar => avatar.startsWith(\"https\"));\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://reqres.in/api",
+			"type": "default"
+		},
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		}
+	]
+}
